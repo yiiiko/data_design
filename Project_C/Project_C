@@ -1,0 +1,254 @@
+
+# coding: utf-8
+
+# ### Yiko Li - Project C
+# 
+# A Dog's Tale by Mark Twain
+
+# 1.
+
+# In[217]:
+
+import matplotlib.pyplot as plt
+import requests                                                                                           
+import nltk
+from wordcloud import WordCloud
+from nltk.tokenize import RegexpTokenizer
+from nltk.corpus import stopwords
+from bs4 import BeautifulSoup
+
+import re
+nltk.download('averaged_perceptron_tagger')
+nltk.download('stopwords')
+
+
+# In[165]:
+
+url = "http://www.gutenberg.org/files/3174/3174.txt"
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+
+
+# In[166]:
+
+response = requests.get(url)
+
+
+# In[167]:
+
+type(response)
+
+
+# In[168]:
+
+soup_dog = BeautifulSoup(response.content, "html.parser")
+
+
+# In[169]:
+
+dog_text = soup_dog.get_text()
+
+
+# In[170]:
+
+dog_text
+
+
+# In[196]:
+
+dog_text[900:1000]
+
+
+# 2.
+
+# a) make all words lowercase
+
+# In[172]:
+
+lowered = []
+for word in words:
+    lowered.append(word.lower())
+
+
+# b.) remove punctuation(?)
+
+# In[200]:
+
+tokenizer = RegexpTokenizer(r'\w+')
+tokenizer.tokenize(dog_text)
+
+
+# c.)Use NLTK Word Tokenize
+
+# In[284]:
+
+from nltk import word_tokenize
+tokens = word_tokenize(dog_text)
+
+
+# In[176]:
+
+tokens[3000:3100]
+
+
+# In[247]:
+
+text = nltk.Text(tokens)
+
+
+# In[248]:
+
+fdist = nltk.FreqDist(text)
+
+
+# In[249]:
+
+type(fdist)
+
+
+# In[180]:
+
+fdist.most_common(20)
+
+
+# In[261]:
+
+fdist = nltk.FreqDist(word.lower() for word in word_tokenize(dog_text))
+
+
+# In[262]:
+
+##twain= ['dog', 'agreement', 'foundation', 'electronic', 'work']
+
+
+# In[264]:
+
+tokens = set(fdist)
+
+
+# In[265]:
+
+tokens = sorted(tokens)
+tokens
+
+
+# d.)Plot top 20 words in text
+
+# In[269]:
+
+texted = soup.get_text()
+words = re.findall('\w+', texted)
+lowered = []
+for word in words:
+    lowered.append(word.lower())
+text = nltk.Text(lowered)
+fdist = nltk.FreqDist(words)
+fdist.plot(20)
+
+
+# In[267]:
+
+plt.figure()
+fdist.plot(20, cumulative=True)
+
+
+# In[274]:
+
+tagged = nltk.pos_tag(text)
+
+
+# In[277]:
+
+tagged[:50]
+
+
+# e.)Dispersion Plot
+
+# In[279]:
+
+text.similar("dog")
+
+
+# In[278]:
+
+fdist['dog']
+
+
+# In[283]:
+
+text.dispersion_plot(tokens[500:510])
+
+
+# In[281]:
+
+text.dispersion_plot(tokens[200:310])
+
+
+# In[250]:
+
+len(text)
+
+
+# In[241]:
+
+text.count("she")
+
+
+# In[209]:
+
+set(stopwords.words('english'))
+
+
+# In[210]:
+
+stop_words = set(stopwords.words('english'))
+
+
+# In[211]:
+
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+stop_words = set(stopwords.words('english'))
+ 
+word_tokens = word_tokenize(dog_text)
+ 
+filtered_sentence = [w for w in word_tokens if not w in stop_words]
+ 
+filtered_sentence = []
+ 
+for w in word_tokens:
+    if w not in stop_words:
+        filtered_sentence.append(w)
+ 
+print(word_tokens)
+print(filtered_sentence)
+
+
+# In[213]:
+
+text.collocations()
+
+
+# In[214]:
+
+filter_text[:10]
+
+
+# 3.
+
+# WordCloud
+
+# In[228]:
+
+wordcloud = WordCloud(background_color = "white",width = 1000, height = 500).generate(dog_text)
+plt.figure(figsize=(15,8))
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.show()
+
+
+# In[ ]:
+
+
+
